@@ -47,4 +47,4 @@ The IPython notebook `edna2qiime.ipynb` performs the following tasks:
        - Concatenates the new columns DataFrame with the merged DataFrame.
        - Drops columns that contain only NaN values.
        - Adds the merged DataFrame to the `merged_dfs` dictionary.
-       - Saves the merged DataFrame to a tab-delimited file named `{project_id}.{runID}.{assay}.tsv` without the index column.
+       - Saves the merged DataFrame to a tab-delimited file named `metadata.{project_id}.{runID}.{assay}.tsv` without the index column.
