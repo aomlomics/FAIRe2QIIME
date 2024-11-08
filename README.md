@@ -1,5 +1,19 @@
 # edna2qiime
 
+### Input and Output Files
+
+Input File                     | Identifiers
+------------------------------ | ---------------------
+studyMetadata_{project}.xlsx   | assay_name
+sampleMetadata_{project}.xlsx  | samp_name
+libraryMetadata_{project}.xlsx | samp_name, assay_name
+
+Output File                          | Identifiers
+------------------------------------ | ----------------------------------
+metadata.{project}.{run}.{assay}.tsv | project_id, seq_run_id, assay_name
+manifest.{project}.{run}.{assay}.csv | project_id, seq_run_id, assay_name
+
+
 ### Code Summary (AI-generated with human review)
 
 The IPython notebook `edna2qiime.ipynb` performs the following tasks:
