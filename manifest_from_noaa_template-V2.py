@@ -13,12 +13,11 @@ import argparse
 
 # usage
 usage = '''
-manifest_from_noaa_template.py -s sampleMetadata_file -l libraryMetadata_file -p paired -P fastq_path -o output_prefix
+manifest_from_noaa_template.py -s sampleMetadata_file -l libraryMetadata_file -p paired -o output_prefix
 
     -s, --sample_file - path name of the sampleMetadata Excel file (required)
     -l, --library_file - path name of the libraryMetadata Excel file (required)
     -p, --paired - Make a manifest file for [paired, single, both], default = paired
-    -P, --fastq_path - path to the sequencing files, to prefix the filenames (required)
     -o, --output_prefix - Prefix for output files, default is ""
 
 '''
@@ -28,7 +27,6 @@ argParser = argparse.ArgumentParser()
 argParser.add_argument("-s", "--sample_file",help="path name of the sampleMetadata Excel file (required)")
 argParser.add_argument("-l", "--library_file", help="path name of the libraryMetadata Excel file (required)")
 argParser.add_argument("-p", "--paired", default="paired",help="Make a manifest file for [paired, single, both], default = paired")
-argParser.add_argument("-P", "--fastq_path",help="path to the sequencing files, to prefix the filenames (required)")
 argParser.add_argument("-o", "--output_prefix", default="",help="Prefix for output files, default is "" ")
 
 
@@ -56,6 +54,8 @@ for runID in seq_run_ids:
             meta = merged.drop(columns=[col for col in merged.columns if 'filename' in col])
             # TODO: add code to split columns in metadata file to extract numeric values
             meta.to_csv(args.output_prefix+f'-{runID}-{assay}_metadata.tsv',sep='\t',index=False)
+            # user inputs fastq file path interactively
+            file_path = input(f"Please provide an absolute path to fastq files for runID '{runID}' and assay '{assay}': ")
             #save manifest
             # need to split up filenames into 2 rows
             if args.paired in ["paired","both"]:
@@ -63,7 +63,7 @@ for runID in seq_run_ids:
                 man_pe = pd.melt(man_pe, id_vars=['samp_name'], value_vars=['filename', 'filename2'], 
                     var_name='direction',value_name='absolute-filepath')
                 man_pe['direction'] = man_pe['direction'].replace({'filename': 'forward', 'filename2': 'reverse'})
-                man_pe['absolute-filepath'] = args.fastq_path + '/'+man_pe['absolute-filepath'].astype(str)
+                man_pe['absolute-filepath'] = file_path + '/'+man_pe['absolute-filepath'].astype(str)
                 man_pe = man_pe.rename(columns={'samp_name': 'sample-id'})
                 # write paired manifest file
                 man_pe = man_pe.iloc[:,[0,2,1]]
@@ -77,7 +77,7 @@ for runID in seq_run_ids:
                 man_se = merged.loc[:,['samp_name','filename']]
                 man_se = man_se.rename(columns={'samp_name': 'sample-id', 'filename': 'absolute-filepath'})
                 man_se['direction'] = 'forward'
-                man_se['absolute-filepath'] = args.fastq_path + '/'+man_se['absolute-filepath'].astype(str)
+                man_se['absolute-filepath'] = file_path + '/'+man_se['absolute-filepath'].astype(str)
 
                 man_se = man_se.iloc[:,[0,2,1]]
 
