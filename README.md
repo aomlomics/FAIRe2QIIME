@@ -1,50 +1,56 @@
-# edna2qiime
+# FAIRe2QIIME
 
-### Input and Output Files
+This script converts NOAA FAIRe Excel metadata into QIIME2-compatible metadata and manifest files for downstream analysis.
 
-Input File                     | Identifiers
------------------------------- | ---------------------
-studyMetadata_{project}.xlsx   | assay_name
-sampleMetadata_{project}.xlsx  | samp_name
-libraryMetadata_{project}.xlsx | samp_name, assay_name
+## Features
 
-Output File                          | Identifiers
------------------------------------- | ----------------------------------
-metadata.{project}.{run}.{assay}.tsv | project_id, seq_run_id, assay_name
-manifest.{project}.{run}.{assay}.csv | project_id, seq_run_id, assay_name
+- Reads project, sample, and experiment run metadata from an Excel file
+- Generates metadata files for each assay (marker gene/subfragment)
+- Generates manifest files for each sequencing run
+- Cleans and merges metadata for QIIME2 workflows
+- Command line interface for flexible input
 
+## Requirements
 
-### Code Summary (AI-generated with human review)
+- Python 3.7+
+- pandas
 
-The IPython notebook `edna2qiime.ipynb` performs the following tasks:
+## Usage
 
-1. **Import Libraries**:
-   - Imports the `pandas` library.
+```sh
+python faire2qiime.py --path_faire <path_to_excel> --absolute_path_sequences <sequences_dir> --output_directory <output_dir>
+```
 
-2. **Load Data**:
-   - Loads the first sheet from three Excel files: `studyMetadata`, `sampleMetadata`, and `libraryMetadata`.
+### Arguments
 
-3. **Refactor `studyMetadata`**:
-   - Selects the last 4 columns of `studyMetadata`.
-   - Sets the `field_name` column as the index.
-   - Transposes the DataFrame to create `studyMetadataT`.
+- `--path_faire` : Path to the FAIRe Excel file containing metadata
+- `--absolute_path_sequences` : Absolute path to the directory containing sequence files
+- `--output_directory` : Directory to save output metadata and manifest files
 
-4. **Extract Unique Sequencing Run IDs and Assay Names**:
-   - Extracts unique values of the `seq_run_id` and `assay_name` columns from `libraryMetadata`.
+### Example
 
-5. **Check Consistency**:
-   - Checks if the values of `assay_name` are the same in `studyMetadataT` and `libraryMetadata`.
+```bash
+python faire2qiime.py \
+  --path_faire 'FAIRe-ODE_myproject.xlsx' \
+  --absolute_path_sequences '/path/to/folder/with/seq_run_ids' \
+  --output_directory .
+```
 
-6. **Merge DataFrames**:
-   - Creates a dictionary `merged_dfs` to store the merged DataFrames.
-   - Iterates over each combination of `seq_run_id` and `assay_name`:
-     - Subsets `libraryMetadata` for the current `seq_run_id` and `assay_name`.
-     - Merges the subset of `libraryMetadata` with `sampleMetadata` using `samp_name` as the key.
-     - If the merged DataFrame is not empty (i.e., the combination of `seq_run_id` and `assay_name` exists in `libraryMetadata`):
-       - Creates a dictionary `new_columns` to hold new columns.
-       - Populates `new_columns` with values from `studyMetadataT` for the 'study_level' index, and overrides with values from the `assay` index if they are not NaN.
-       - Converts `new_columns` to a DataFrame with the same indexes as the merged DataFrame, repeating the values for each row.
-       - Concatenates the new columns DataFrame with the merged DataFrame.
-       - Drops columns that contain only NaN values.
-       - Adds the merged DataFrame to the `merged_dfs` dictionary.
-       - Saves the merged DataFrame to a tab-delimited file named `metadata.{project_id}.{runID}.{assay}.tsv` without the index column.
+## Output
+
+- Metadata TSV files for each assay, named like `seusmbon_<gene>-<subfragment>_metadata.tsv`
+- Manifest TSV files for each sequencing run, named like `<seq_run_id>_manifest.tsv`
+
+## Troubleshooting
+
+- Ensure all required columns are present in the Excel file
+- If you see errors about file paths, check that your sequence directory and filenames are correct
+- For pandas import errors, install pandas: `pip install pandas`
+
+## License
+
+CC0
+
+## Disclaimer
+
+This repository is a scientific product and is not official communication of the National Oceanic and Atmospheric Administration, or the United States Department of Commerce. All NOAA GitHub project code is provided on an 'as is' basis and the user assumes responsibility for its use. Any claims against the Department of Commerce or Department of Commerce bureaus stemming from the use of this GitHub project will be governed by all applicable Federal law. Any reference to specific commercial products, processes, or services by service mark, trademark, manufacturer, or otherwise, does not constitute or imply their endorsement, recommendation or favoring by the Department of Commerce. The Department of Commerce seal and logo, or the seal and logo of a DOC bureau, shall not be used in any manner to imply endorsement of any commercial product or activity by DOC or the United States Government.
