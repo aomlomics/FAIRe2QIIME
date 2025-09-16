@@ -38,7 +38,7 @@ python faire2qiime.py \
 
 ## Output
 
-- Metadata TSV files for each assay, named like `seusmbon_<gene>-<subfragment>_metadata.tsv`
+- Metadata TSV files for each assay, named like `<project_id>>_<gene>-<subfragment>_metadata.tsv`
 - Manifest TSV files for each sequencing run, named like `<seq_run_id>_manifest.tsv`
 
 ## Troubleshooting

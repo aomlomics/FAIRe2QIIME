@@ -31,7 +31,7 @@ def main(path_faire, absolute_path_sequences, output_directory):
             target_gene_subfragment = f"{gene}-{subfragment_part}"
         else:
             target_gene_subfragment = gene
-        metadata.to_csv(os.path.join(output_directory, f"seusmbon_{target_gene_subfragment}_metadata.tsv"), sep='\t', index=False)
+        metadata.to_csv(os.path.join(output_directory, f"{project_id}_{target_gene_subfragment}_metadata.tsv"), sep='\t', index=False)
 
     # Manifest file for each seq_run_id
     for seq_run_id in seq_run_ids:
