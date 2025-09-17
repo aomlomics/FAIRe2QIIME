@@ -4,11 +4,11 @@ This script converts NOAA FAIRe Excel metadata into QIIME2-compatible metadata a
 
 ## Features
 
-- Reads project, sample, and experiment run metadata from an Excel file
-- Generates metadata files for each assay (marker gene/subfragment)
-- Generates manifest files for each sequencing run
-- Cleans and merges metadata for QIIME2 workflows
-- Command line interface for flexible input
+- Reads project, sample, and experiment-run metadata from an Excel file
+- Generates metadata files for each assay (named with marker gene and subfragment)
+- Generates manifest files for each sequencing run (named with seq_run_id) and assay (named with marker gene and subfragment)
+- Duplicate columns in sample or project metadata will be appended with "_SAMPLE" or "_PROJECT", respectively
+- "samp_name" column is renamed to "sample_name" to be compatible with QIIME 2
 
 ## Requirements
 
@@ -31,7 +31,7 @@ python faire2qiime.py --path_faire <path_to_excel> --absolute_path_sequences <se
 
 ```bash
 python faire2qiime.py \
-  --path_faire 'FAIRe-ODE_myproject.xlsx' \
+  --path_faire 'FAIRe-NOAA_myproject.xlsx' \
   --absolute_path_sequences '/path/to/folder/with/seq_run_ids' \
   --output_directory .
 ```
@@ -49,7 +49,7 @@ python faire2qiime.py \
 
 ## License
 
-CC0
+[CC0](https://creativecommons.org/public-domain/cc0/)
 
 ## Disclaimer
 

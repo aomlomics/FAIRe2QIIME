@@ -22,9 +22,10 @@ def main(path_faire, absolute_path_sequences, output_directory):
     # Metadata file for each assay_name
     dict_assay_short = {}
     for assay_name in df_exptrun['assay_name'].unique():
-        metadata = df_exptrun[df_exptrun['assay_name'] == assay_name].merge(df_sample, on='samp_name', how='left')
-        metadata = pd.merge(metadata, df_project_filled.loc[assay_name].to_frame().transpose(), how='cross')
+        metadata = df_exptrun[df_exptrun['assay_name'] == assay_name].merge(df_sample, on='samp_name', how='left', suffixes=('', '_SAMPLE'))
+        metadata = pd.merge(metadata, df_project_filled.loc[assay_name].to_frame().transpose(), how='cross', suffixes=('', '_PROJECT'))
         metadata.dropna(axis=1, how='all', inplace=True)
+        metadata.rename(columns={'samp_name': 'sample_name'}, inplace=True)
         gene = df_project_filled.loc[assay_name]['target_gene'].split(' ')[0]
         subfragment = df_project_filled.loc[assay_name]['target_subfragment']
         subfragment_part = subfragment.split(' ')[0].replace('-', '').replace('_', '') if isinstance(subfragment, str) and subfragment.strip() else ''
@@ -33,6 +34,7 @@ def main(path_faire, absolute_path_sequences, output_directory):
         else:
             dict_assay_short[assay_name] = gene
         metadata.to_csv(os.path.join(output_directory, f"{project_id}_{dict_assay_short[assay_name]}_metadata.tsv"), sep='\t', index=False)
+        print(f"Generated metadata file {project_id}_{dict_assay_short[assay_name]}_metadata.tsv")
 
     # Manifest file for each seq_run_id
     for seq_run_id in seq_run_ids:
@@ -42,6 +44,7 @@ def main(path_faire, absolute_path_sequences, output_directory):
             manifest['filename2'] = manifest['filename2'].apply(lambda x: os.path.join(absolute_path_sequences, f'{seq_run_id}', str(x)))
             manifest.columns = ['sample-id', 'forward-absolute-filepath', 'reverse-absolute-filepath']
             manifest.to_csv(os.path.join(output_directory, f"{seq_run_id}_{dict_assay_short[assay_name]}_manifest.tsv"), sep='\t', index=False)
+            print(f"Generated manifest file {seq_run_id}_{dict_assay_short[assay_name]}_manifest.tsv")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="FAIRe2QIIME CLI: Generate metadata and manifest files from NOAA template.")
