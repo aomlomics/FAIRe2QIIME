@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="banner_faire2qiime.png" alt="FAIRe2QIIME Banner" width="800">
+</div>
+
 # FAIRe2QIIME
 
 This script converts NOAA FAIRe Excel metadata into QIIME2-compatible metadata and manifest files for downstream analysis.
