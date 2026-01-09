@@ -2,7 +2,7 @@ import pandas as pd
 import argparse
 import os
 
-def main(path_faire, absolute_path_sequences, output_directory):
+def main(path_faire, absolute_path_sequences, output_directory, column_suffix=None, direction_suffix='left', num_chars_suffix=20, delimiter_suffix='_'):
     df_project = pd.read_excel(path_faire, sheet_name='projectMetadata', comment='#')
     df_sample = pd.read_excel(path_faire, sheet_name='sampleMetadata', comment='#')
     df_exptrun = pd.read_excel(path_faire, sheet_name='experimentRunMetadata', comment='#')
