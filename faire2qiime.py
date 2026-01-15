@@ -1,6 +1,37 @@
 import pandas as pd
 import argparse
 import os
+try:
+    import pyfiglet
+except ImportError:
+    pyfiglet = None
+
+def display_banner():
+    """Display CLI banner with FAIRe2QIIME word art."""
+    if pyfiglet:
+        try:
+            banner = pyfiglet.figlet_format("FAIRe2QIIME", font="standard")
+            print("\n" + "="*80)
+            print(banner, end="")
+            print("NOAA FAIRe Excel to QIIME2 Metadata & Manifest Converter")
+            print("="*80 + "\n")
+        except Exception:
+            # Fallback if pyfiglet fails
+            print("\n" + "="*80)
+            print("               ███████╗ █████╗ ██╗██████╗ ███████╗██████╗  ██████╗ ██╗██╗███╗   ███╗███████╗")
+            print("               ██╔════╝██╔══██╗██║██╔══██╗██╔════╝╚════██╗██╔═══██╗██║██║████╗ ████║██╔════╝")
+            print("               █████╗  ███████║██║██████╔╝█████╗   █████╔╝██║   ██║██║██║██╔████╔██║█████╗  ")
+            print("               ██╔══╝  ██╔══██║██║██╔══██╗██╔══╝  ██╔═══╝ ██║▄▄ ██║██║██║██║╚██╔╝██║██╔══╝  ")
+            print("               ██║     ██║  ██║██║██║  ██║███████╗███████╗╚██████╔╝██║██║██║ ╚═╝ ██║███████╗")
+            print("               ╚═╝     ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚══════╝ ╚══▀▀═╝ ╚═╝╚═╝╚═╝     ╚═╝╚══════╝")
+            print("               NOAA FAIRe Excel to QIIME2 Metadata & Manifest Converter")
+            print("="*80 + "\n")
+    else:
+        # Simple fallback without pyfiglet
+        print("\n" + "="*80)
+        print("                              F A I R e 2 Q I I M E")
+        print("               NOAA FAIRe Excel to QIIME2 Metadata & Manifest Converter")
+        print("="*80 + "\n")
 
 def main(path_faire, sample_name_column, absolute_path_sequences, output_directory, column_suffix, direction_suffix, num_chars_suffix, delimiter_suffix):
     df_project = pd.read_excel(path_faire, sheet_name='projectMetadata', comment='#')
@@ -70,6 +101,13 @@ def main(path_faire, sample_name_column, absolute_path_sequences, output_directo
             print(f"Generated manifest file {seq_run_id}_{dict_assay_short[assay_name]}_manifest.tsv")
 
 if __name__ == "__main__":
+    # Display banner
+    display_banner()
+    
+    # Inform user about optional pyfiglet dependency
+    if pyfiglet is None:
+        print("💡 Tip: Install pyfiglet for enhanced ASCII art banner: pip install pyfiglet\n")
+    
     parser = argparse.ArgumentParser(description="FAIRe2QIIME CLI: Generate metadata and manifest files from NOAA template.")
     parser.add_argument('--path_faire', required=True, help='Path to FAIRe Excel file [required]')
     parser.add_argument('--sample_name_column', required=True, help='Column name to use for sample names in output metadata files (example: lib_id) [required]')
