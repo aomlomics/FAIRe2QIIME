@@ -8,29 +8,35 @@ except ImportError:
 
 def display_banner():
     """Display CLI banner with FAIRe2QIIME word art."""
+    # ANSI color codes for blue text
+    color_start = "\033[34m"
+    color_end = "\033[0m"
     if pyfiglet:
         try:
             banner = pyfiglet.figlet_format("FAIRe2QIIME", font="standard")
             print("\n" + "="*80)
-            print(banner, end="")
+            # Print the generated banner in blue
+            print(f"{color_start}{banner}{color_end}", end="")
             print("NOAA FAIRe Excel to QIIME2 Metadata & Manifest Converter")
             print("="*80 + "\n")
         except Exception:
             # Fallback if pyfiglet fails
             print("\n" + "="*80)
-            print("               ███████╗ █████╗ ██╗██████╗ ███████╗██████╗  ██████╗ ██╗██╗███╗   ███╗███████╗")
-            print("               ██╔════╝██╔══██╗██║██╔══██╗██╔════╝╚════██╗██╔═══██╗██║██║████╗ ████║██╔════╝")
-            print("               █████╗  ███████║██║██████╔╝█████╗   █████╔╝██║   ██║██║██║██╔████╔██║█████╗  ")
-            print("               ██╔══╝  ██╔══██║██║██╔══██╗██╔══╝  ██╔═══╝ ██║▄▄ ██║██║██║██║╚██╔╝██║██╔══╝  ")
-            print("               ██║     ██║  ██║██║██║  ██║███████╗███████╗╚██████╔╝██║██║██║ ╚═╝ ██║███████╗")
-            print("               ╚═╝     ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚══════╝ ╚══▀▀═╝ ╚═╝╚═╝╚═╝     ╚═╝╚══════╝")
-            print("               NOAA FAIRe Excel to QIIME2 Metadata & Manifest Converter")
+            # Print fallback block art in blue
+            print(f"{color_start}               ███████╗ █████╗ ██╗██████╗ ███████╗██████╗  ██████╗ ██╗██╗███╗   ███╗███████╗{color_end}")
+            print(f"{color_start}               ██╔════╝██╔══██╗██║██╔══██╗██╔════╝╚════██╗██╔═══██╗██║██║████╗ ████║██╔════╝{color_end}")
+            print(f"{color_start}               █████╗  ███████║██║██████╔╝█████╗   █████╔╝██║   ██║██║██║██╔████╔██║█████╗  {color_end}")
+            print(f"{color_start}               ██╔══╝  ██╔══██║██║██╔══██╗██╔══╝  ██╔═══╝ ██║▄▄ ██║██║██║██║╚██╔╝██║██╔══╝  {color_end}")
+            print(f"{color_start}               ██║     ██║  ██║██║██║  ██║███████╗███████╗╚██████╔╝██║██║██║ ╚═╝ ██║███████╗{color_end}")
+            print(f"{color_start}               ╚═╝     ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚══════╝╚══════╝ ╚══▀▀═╝ ╚═╝╚═╝╚═╝     ╚═╝╚══════╝{color_end}")
+            print(f"{color_start}               NOAA FAIRe Excel to QIIME2 Metadata & Manifest Converter{color_end}")
             print("="*80 + "\n")
     else:
         # Simple fallback without pyfiglet
         print("\n" + "="*80)
-        print("                              F A I R e 2 Q I I M E")
-        print("               NOAA FAIRe Excel to QIIME2 Metadata & Manifest Converter")
+        # Print simple fallback in blue
+        print(f"{color_start}                              F A I R e 2 Q I I M E{color_end}")
+        print(f"{color_start}               NOAA FAIRe Excel to QIIME2 Metadata & Manifest Converter{color_end}")
         print("="*80 + "\n")
 
 def main(path_faire, sample_name_column, absolute_path_sequences, output_directory, column_suffix, direction_suffix, num_chars_suffix, delimiter_suffix):
