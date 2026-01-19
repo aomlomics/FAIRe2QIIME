@@ -98,7 +98,7 @@ def main(path_faire, sample_name_column, absolute_path_sequences, output_directo
     # Manifest file for each seq_run_id
     for seq_run_id in seq_run_ids:
         for assay_name in df_exptrun[df_exptrun['seq_run_id'] == seq_run_id]['assay_name'].unique():
-            manifest = df_exptrun[(df_exptrun['seq_run_id'] == seq_run_id) & (df_exptrun['assay_name'] == assay_name)][['samp_name', 'filename', 'filename2']]
+            manifest = df_exptrun[(df_exptrun['seq_run_id'] == seq_run_id) & (df_exptrun['assay_name'] == assay_name)][[sample_name_column, 'filename', 'filename2']]
             manifest['filename'] = manifest['filename'].apply(lambda x: os.path.join(absolute_path_sequences, f'{seq_run_id}', str(x)))
             manifest['filename2'] = manifest['filename2'].apply(lambda x: os.path.join(absolute_path_sequences, f'{seq_run_id}', str(x)))
             manifest.columns = ['sample-id', 'forward-absolute-filepath', 'reverse-absolute-filepath']
@@ -115,7 +115,7 @@ if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(description="FAIRe2QIIME CLI: Generate metadata and manifest files from NOAA template.")
     parser.add_argument('--path_faire', required=True, help='Path to FAIRe Excel file [required]')
-    parser.add_argument('--sample_name_column', required=True, help='Column name to use for sample names in output metadata files (example: lib_id) [required]')
+    parser.add_argument('--sample_name_column', required=True, help='Column name to use for sample names in output metadata and manifest files (example: lib_id) [required]')
     parser.add_argument('--absolute_path_sequences', required=True, help='Absolute path to sequences directory [required]')
     parser.add_argument('--output_directory', required=True, help='Directory to save output files [required]')
     parser.add_argument('--column_suffix', required=False, help='Column name to get suffix from to differentiate samples [optional]', default=None)
